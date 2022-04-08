@@ -2,6 +2,7 @@ name: Slack Message Test
 
 on:
   schedule:
+    # 평일 KST 16:30
     - cron: 30 7 * * 1-5
 jobs:
   test:
