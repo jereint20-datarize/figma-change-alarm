@@ -30,6 +30,10 @@ jobs:
         id: git
         shell: bash
         run: |
+          git --version
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+          git status
           RESULT=$(git status -s)
           if [[ $RESULT == *"figmaCanvas"* ]]; then
             echo "::set-output name=status::true"
