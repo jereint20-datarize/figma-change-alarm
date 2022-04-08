@@ -21,6 +21,8 @@ async function getDesignTokenFromFigma() {
     return;
   }
 
+  console.log("Changed in Figma");
+
   fs.writeFile(
     "figmaCanvas.json",
     JSON.stringify(afterFigma),
@@ -29,6 +31,8 @@ async function getDesignTokenFromFigma() {
       if (err) throw err;
     }
   );
+
+  console.log("New file saved");
 }
 
 getDesignTokenFromFigma();
