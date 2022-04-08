@@ -1,9 +1,9 @@
-name: Slack Message Test
+name: Slack Schedule Test
 
 on:
   schedule:
-    # 평일 KST 16:30
-    - cron: 30 7 * * 1-5
+    # 평일 KST 16:40
+    - cron: "40 7 * * 1-5"
 jobs:
   test:
     runs-on: ubuntu-latest
