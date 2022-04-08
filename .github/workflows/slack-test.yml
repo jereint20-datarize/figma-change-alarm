@@ -20,7 +20,10 @@ jobs:
       - name: slack-send
         uses: slackapi/slack-github-action@v1.18.0
         with:
-          slack-message: "Test Message: ${{ github.event.inputs.messages }}"
+          payload: |
+            {
+              "text": "Test Message: ${{ github.event.inputs.messages }}"
+            }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
