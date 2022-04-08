@@ -1,0 +1,52 @@
+name: Figma Check Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: "Name"
+        required: false
+
+jobs:
+  save:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3.0.0
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "lts/*"
+          cache: "yarn"
+      - name: Setup yarn
+        run: yarn install
+      - name: Check Figma Updates
+        run: yarn build
+        env:
+          FIGMA_TOKEN: ${{ secrets.FIGMA_TOKEN }}
+          FIGMA_FILEKEY: ${{ secrets.FIGMA_FILEKEY }}
+      - name: Check Git status
+        id: git
+        shell: bash
+        run: |
+          RESULT=$(git status -s)
+          if [[ $RESULT == *"figmaCanvas"* ]]; then
+            echo "::set-output name=status::true"
+          fi
+      - name: Commit json
+        if: contains(steps.git.outputs.result, 'true')
+        run: |
+          git add .
+          git commit -m "figma update"
+      - name: Send Figma Message
+        if: contains(steps.git.outputs.result, 'true')
+        uses: slackapi/slack-github-action@v1.18.0
+        with:
+          payload: |
+            {
+              "text": "Figma Changed"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
